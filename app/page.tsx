@@ -106,10 +106,11 @@ export default function Home() {
     <main className={styles.page}>
       <header className={styles.header}>
         <span className={styles.badge}>Microsoft MarkItDown</span>
-        <h1 className={styles.title}>PDF to Markdown for Claude</h1>
+        <h1 className={styles.title}>PDF to Markdown for AI</h1>
         <p className={styles.subtitle}>
-          Drop a document and get clean Markdown back. Paste the Markdown into Claude
-          instead of the raw file. You keep the same content but use far fewer tokens,
+          Drop a document and get clean Markdown back. Paste the Markdown into any AI
+          tool instead of the raw file. Works with Claude, ChatGPT, Gemini, Llama, and
+          any text-based model. You keep the same content but use far fewer tokens,
           which lowers your cost.
         </p>
       </header>
@@ -219,12 +220,13 @@ export default function Home() {
         <div className={styles.infoBlock}>
           <h2 className={styles.infoTitle}>How it lowers your cost</h2>
           <p className={styles.infoText}>
-            AI tools charge by tokens, and tokens are roughly chunks of text. The more
-            text you send, the more you pay. When you paste a raw file, the model has to
-            process all that extra formatting data. Markdown strips it away, so the same
-            document turns into far fewer tokens. Fewer tokens means a smaller bill and
-            faster replies. It also leaves more room in the context window, so you can
-            paste longer documents without hitting the limit.
+            Every text-based AI charges by tokens, and tokens are roughly chunks of
+            text. The more text you send, the more you pay. When you paste a raw file,
+            the model has to process all that extra formatting data. Markdown strips it
+            away, so the same document turns into far fewer tokens. This holds for any
+            model: Claude, ChatGPT, Gemini, and the rest. Fewer tokens means a smaller
+            bill and faster replies. It also leaves more room in the context window, so
+            you can paste longer documents without hitting the limit.
           </p>
         </div>
 
@@ -234,7 +236,7 @@ export default function Home() {
             <li>Drop a file or choose one (PDF, Word, PowerPoint, Excel, CSV, or HTML).</li>
             <li>Wait a moment while it converts in your browser session.</li>
             <li>Copy the Markdown or download the .md file.</li>
-            <li>Paste it into Claude or any other AI tool.</li>
+            <li>Paste it into Claude, ChatGPT, Gemini, or any other AI tool.</li>
           </ol>
         </div>
 

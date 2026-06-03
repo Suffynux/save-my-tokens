@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PDF → Markdown · for Claude",
+  title: "PDF to Markdown for AI",
   description:
-    "Convert PDFs and documents to clean Markdown with Microsoft MarkItDown — paste into Claude and save tokens.",
+    "Convert PDFs and documents to clean Markdown with Microsoft MarkItDown. Paste into Claude, ChatGPT, Gemini, or any text-based AI and save tokens.",
 };
 
 export default function RootLayout({
