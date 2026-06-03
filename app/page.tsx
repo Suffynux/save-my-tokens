@@ -106,10 +106,11 @@ export default function Home() {
     <main className={styles.page}>
       <header className={styles.header}>
         <span className={styles.badge}>Microsoft MarkItDown</span>
-        <h1 className={styles.title}>PDF → Markdown for Claude</h1>
+        <h1 className={styles.title}>PDF to Markdown for Claude</h1>
         <p className={styles.subtitle}>
-          Drop a document, get clean Markdown. Paste that into Claude instead of the
-          raw file — fewer tokens, lower cost, same content.
+          Drop a document and get clean Markdown back. Paste the Markdown into Claude
+          instead of the raw file. You keep the same content but use far fewer tokens,
+          which lowers your cost.
         </p>
       </header>
 
@@ -201,6 +202,50 @@ export default function Home() {
             />
           </div>
         ) : null}
+      </section>
+
+      <section className={styles.info}>
+        <div className={styles.infoBlock}>
+          <h2 className={styles.infoTitle}>Why convert to Markdown?</h2>
+          <p className={styles.infoText}>
+            A PDF or Word file carries a lot of extra weight: fonts, layout, page
+            geometry, images, and hidden structure. An AI model does not need any of
+            that to read your document. Markdown keeps only the real text and a light
+            structure such as headings, lists, and tables. So the model gets the same
+            content in a much smaller form.
+          </p>
+        </div>
+
+        <div className={styles.infoBlock}>
+          <h2 className={styles.infoTitle}>How it lowers your cost</h2>
+          <p className={styles.infoText}>
+            AI tools charge by tokens, and tokens are roughly chunks of text. The more
+            text you send, the more you pay. When you paste a raw file, the model has to
+            process all that extra formatting data. Markdown strips it away, so the same
+            document turns into far fewer tokens. Fewer tokens means a smaller bill and
+            faster replies. It also leaves more room in the context window, so you can
+            paste longer documents without hitting the limit.
+          </p>
+        </div>
+
+        <div className={styles.infoBlock}>
+          <h2 className={styles.infoTitle}>How to use it</h2>
+          <ol className={styles.infoList}>
+            <li>Drop a file or choose one (PDF, Word, PowerPoint, Excel, CSV, or HTML).</li>
+            <li>Wait a moment while it converts in your browser session.</li>
+            <li>Copy the Markdown or download the .md file.</li>
+            <li>Paste it into Claude or any other AI tool.</li>
+          </ol>
+        </div>
+
+        <div className={styles.infoBlock}>
+          <h2 className={styles.infoTitle}>File size limit</h2>
+          <p className={styles.infoText}>
+            You can upload files up to 4.5 MB each. This is the limit of the free
+            serverless hosting the tool runs on. If your file is larger, try splitting
+            the PDF into smaller parts and converting each one.
+          </p>
+        </div>
       </section>
 
       <footer className={styles.footer}>
