@@ -1,60 +1,102 @@
-# PDF → Markdown for Claude
+# PDF to Markdown
 
-A tiny, no-database tool that converts a PDF (or Word / PowerPoint / Excel / CSV /
-HTML) into clean Markdown using **[Microsoft MarkItDown](https://github.com/microsoft/markitdown)**.
-Paste the Markdown into Claude instead of uploading the raw file — same content,
-far fewer tokens.
+An open source tool that converts a PDF, Word, PowerPoint, Excel, CSV, or HTML
+file into clean Markdown using [Microsoft MarkItDown](https://github.com/microsoft/markitdown).
+Paste the Markdown into Claude, ChatGPT, Gemini, or any text based AI instead of
+uploading the raw file. You keep the same content but use far fewer tokens, which
+lowers your cost.
 
-- **Frontend** — Next.js (App Router), static, glassmorphism dark UI.
-- **Backend** — a single Python serverless function (`api/markitdown.py`) that runs
-  MarkItDown on demand. No database, no auth, no persistent storage.
+This project is free to use, free to fork, and free to deploy. You do not need to
+write any code to run your own copy. All you need is a Vercel account.
 
+## What it does
 
-## How it works
+The browser reads your file and sends the raw bytes to a small Python function.
+That function runs MarkItDown, returns the Markdown, and deletes the temporary
+file. The page then shows the Markdown with a token estimate, a copy button, and a
+download button. There is no database, no sign in, and nothing is stored.
 
-1. The browser sends the raw file bytes to `POST /api/markitdown`
-   (filename in the `X-Filename` header).
-2. The Python function writes it to a temp file, runs MarkItDown, returns
-   `{ "markdown": "..." }`, and deletes the temp file.
-3. The UI shows the Markdown with a token estimate, **Copy**, and **Download .md**.
+## Deploy your own copy
 
-## Deploy to Vercel
+You can have a live version running in a few minutes.
 
-1. Push this folder to a GitHub repo.
-2. In Vercel: **New Project → import the repo → Deploy** (no env vars needed).
-3. Vercel detects Next.js for the frontend and installs `requirements.txt`
-   (`markitdown`) for the Python function automatically.
+1. Create a free account at [vercel.com](https://vercel.com).
+2. Fork this repository to your own GitHub account using the Fork button at the
+   top of the GitHub page.
+3. In Vercel, click New Project and import the repository you just forked.
+4. Click Deploy. You do not need to set any environment variables.
 
-That's it — the live URL serves both the UI and the converter.
+Vercel detects the Next.js frontend and installs the Python dependency in
+`api/requirements.txt` automatically. When the build finishes you get a live URL
+that serves both the interface and the converter.
 
-## Local development
+Every time you push a change to your fork, Vercel rebuilds and updates the live
+site for you.
 
-`npm run dev` only runs the Next.js frontend; it does **not** run the Python
-function. To test the full flow locally, use the Vercel CLI (it emulates the
-Python runtime):
+## Make changes
+
+The project is small and the files are easy to find. To see what each file does,
+read [DOCS.md](DOCS.md), which describes every module in plain language.
+
+Common edits:
+
+1. Change the wording, headings, or layout in `app/page.tsx`.
+2. Change the colours, spacing, or theme in `app/page.module.css` and
+   `app/globals.css`.
+3. Change the browser tab icon in `app/icon.tsx`.
+4. Change the conversion behaviour or the file size limit in `api/markitdown.py`.
+
+After you edit a file, commit and push it to your fork and Vercel deploys the new
+version on its own.
+
+## Keep the docs current
+
+When you change how a module works, update its description so the documentation
+stays accurate.
+
+1. Open [DOCS.md](DOCS.md) and find the section for the file you changed.
+2. Update the text to match the new behaviour.
+3. If you added a new file, add a short section for it under the matching heading.
+4. Commit and push together with your code change so the two never drift apart.
+
+## Run it on your own machine
+
+Running `npm run dev` starts the Next.js frontend but does not run the Python
+function. To test the full conversion flow locally, use the Vercel command line
+tool, which emulates the Python runtime:
 
 ```bash
 npm i -g vercel
 vercel dev
 ```
 
-Then open the printed `localhost` URL.
+Then open the printed localhost address.
 
-## Limitations
+## Limits
 
-- **Max file size: 4.5 MB** — the Vercel Hobby serverless request body limit.
-- **Text PDFs only** — scanned / image-only PDFs have no extractable text, so
-  they return an error (MarkItDown does no OCR by default).
+The maximum file size is 4.5 megabytes, which is the Vercel Hobby serverless body
+limit. Only documents with extractable text are supported. Scanned or image only
+PDFs return an error because MarkItDown does not perform optical character
+recognition by default. If a file is too large, try splitting the PDF into smaller
+parts and converting each one.
 
 ## Project layout
 
 ```
 app/
-  page.tsx          UI (client component)
-  page.module.css   styles
-  globals.css       theme
+  layout.tsx        root layout, fonts, metadata, and the theme script
+  page.tsx          the interface (client component)
+  page.module.css   styles for the page
+  globals.css       theme variables
+  icon.tsx          generated browser tab icon
 api/
-  markitdown.py     Python serverless function (the converter)
-  requirements.txt  Python dependency: markitdown (must live beside the function)
-vercel.json         function memory / timeout
+  markitdown.py     Python serverless function that runs the conversion
+  requirements.txt  Python dependency, markitdown, must sit beside the function
+next.config.ts      Next.js configuration
+vercel.json         function memory and timeout
+DOCS.md             full description of every module
 ```
+
+## License
+
+This project is open source. You are free to use it, change it, and deploy it.
