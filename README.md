@@ -55,6 +55,6 @@ app/
   globals.css       theme
 api/
   markitdown.py     Python serverless function (the converter)
-requirements.txt    Python dependency: markitdown
+  requirements.txt  Python dependency: markitdown (must live beside the function)
 vercel.json         function memory / timeout
 ```
