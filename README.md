@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PDF → Markdown for Claude
 
-## Getting Started
+A tiny, no-database tool that converts a PDF (or Word / PowerPoint / Excel / CSV /
+HTML) into clean Markdown using **[Microsoft MarkItDown](https://github.com/microsoft/markitdown)**.
+Paste the Markdown into Claude instead of uploading the raw file — same content,
+far fewer tokens.
 
-First, run the development server:
+- **Frontend** — Next.js (App Router), static, glassmorphism dark UI.
+- **Backend** — a single Python serverless function (`api/markitdown.py`) that runs
+  MarkItDown on demand. No database, no auth, no persistent storage.
+
+
+## How it works
+
+1. The browser sends the raw file bytes to `POST /api/markitdown`
+   (filename in the `X-Filename` header).
+2. The Python function writes it to a temp file, runs MarkItDown, returns
+   `{ "markdown": "..." }`, and deletes the temp file.
+3. The UI shows the Markdown with a token estimate, **Copy**, and **Download .md**.
+
+## Deploy to Vercel
+
+1. Push this folder to a GitHub repo.
+2. In Vercel: **New Project → import the repo → Deploy** (no env vars needed).
+3. Vercel detects Next.js for the frontend and installs `requirements.txt`
+   (`markitdown`) for the Python function automatically.
+
+That's it — the live URL serves both the UI and the converter.
+
+## Local development
+
+`npm run dev` only runs the Next.js frontend; it does **not** run the Python
+function. To test the full flow locally, use the Vercel CLI (it emulates the
+Python runtime):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm i -g vercel
+vercel dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open the printed `localhost` URL.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Limitations
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Max file size: 4.5 MB** — the Vercel Hobby serverless request body limit.
+- **Text PDFs only** — scanned / image-only PDFs have no extractable text, so
+  they return an error (MarkItDown does no OCR by default).
 
-## Learn More
+## Project layout
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/
+  page.tsx          UI (client component)
+  page.module.css   styles
+  globals.css       theme
+api/
+  markitdown.py     Python serverless function (the converter)
+requirements.txt    Python dependency: markitdown
+vercel.json         function memory / timeout
+```
