@@ -1,10 +1,39 @@
 .page {
+  position: relative;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 56px 20px 72px;
   gap: 28px;
+}
+
+.themeToggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  backdrop-filter: blur(12px);
+  transition: background 0.16s ease, transform 0.12s ease, border-color 0.16s ease;
+}
+.themeToggle:hover {
+  background: var(--panel-strong);
+  border-color: var(--border-strong);
+}
+.themeToggle:active {
+  transform: translateY(1px);
+}
+.themeToggle svg {
+  width: 18px;
+  height: 18px;
 }
 
 .header {
@@ -99,8 +128,8 @@
   margin-top: 4px;
   padding: 10px 20px;
   border-radius: 10px;
-  background: #fafafa;
-  color: #0a0a0b;
+  background: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
   font-size: 14px;
   transition: transform 0.12s ease, opacity 0.12s ease;
@@ -214,12 +243,13 @@
 }
 
 .btnPrimary {
-  background: #fafafa;
-  color: #0a0a0b;
+  background: var(--accent);
+  color: var(--accent-text);
   border-color: transparent;
 }
 .btnPrimary:hover {
-  background: #fff;
+  background: var(--accent);
+  opacity: 0.9;
 }
 
 .output {
@@ -228,7 +258,7 @@
   resize: vertical;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--code-bg);
   color: var(--text);
   padding: 16px;
   font-family: var(--font-geist-mono, ui-monospace, "SF Mono", Menlo, monospace);
@@ -292,9 +322,35 @@
   font-size: 12px;
   color: var(--text-faint);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 .footer a {
   color: var(--text-dim);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.credit {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.signature {
+  font-family: var(--font-script, cursive);
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  background: linear-gradient(90deg, #7c3aed, #ec4899, #f59e0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: opacity 0.16s ease;
+}
+.signature:hover {
+  opacity: 0.85;
 }

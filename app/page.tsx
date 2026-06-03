@@ -1,7 +1,9 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
+
+type Theme = "light" | "dark";
 
 const ACCEPT = ".pdf,.docx,.pptx,.xlsx,.csv,.html,.htm,.txt,.md";
 const MAX_BYTES = 4_500_000; // Vercel Hobby serverless body limit.
@@ -21,7 +23,29 @@ export default function Home() {
   const [fileName, setFileName] = useState("");
   const [dragging, setDragging] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [theme, setTheme] = useState<Theme>("dark");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Pick up whatever the pre-paint script already set on <html>.
+  useEffect(() => {
+    const current = document.documentElement.getAttribute("data-theme");
+    // One-time sync from the pre-paint theme script; not a render-driven update.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (current === "light" || current === "dark") setTheme(current);
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next: Theme = prev === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch {
+        // ignore storage errors (private mode, etc.)
+      }
+      return next;
+    });
+  }, []);
 
   const convert = useCallback(async (file: File) => {
     setFileName(file.name);
@@ -104,9 +128,27 @@ export default function Home() {
 
   return (
     <main className={styles.page}>
+      <button
+        className={styles.themeToggle}
+        onClick={toggleTheme}
+        aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+        title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      >
+        {theme === "dark" ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        )}
+      </button>
+
       <header className={styles.header}>
-        <span className={styles.badge}>Microsoft MarkItDown</span>
-        <h1 className={styles.title}>PDF to Markdown for AI</h1>
+        <span className={styles.badge}>Save your token</span>
+        <h1 className={styles.title}>Save your tokens</h1>
         <p className={styles.subtitle}>
           Drop a document and get clean Markdown back. Paste the Markdown into any AI
           tool instead of the raw file. Works with Claude, ChatGPT, Gemini, Llama, and
@@ -251,11 +293,24 @@ export default function Home() {
       </section>
 
       <footer className={styles.footer}>
-        Runs entirely on{" "}
-        <a href="https://github.com/microsoft/markitdown" target="_blank" rel="noreferrer">
-          Microsoft MarkItDown
-        </a>
-        . Your file is processed on-demand and never stored.
+        <div>
+          Runs entirely on{" "}
+          <a href="https://github.com/microsoft/markitdown" target="_blank" rel="noreferrer">
+            Microsoft MarkItDown
+          </a>
+          . Your file is processed on-demand and never stored.
+        </div>
+        <div className={styles.credit}>
+          Developed by{" "}
+          <a
+            className={styles.signature}
+            href="https://suffynux.me/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Sufiyan
+          </a>
+        </div>
       </footer>
     </main>
   );

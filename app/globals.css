@@ -1,4 +1,5 @@
-:root {
+:root,
+[data-theme="dark"] {
   --bg: #0a0a0b;
   --bg-2: #111114;
   --panel: rgba(255, 255, 255, 0.045);
@@ -9,8 +10,32 @@
   --text-dim: #a1a1aa;
   --text-faint: #6b6b73;
   --danger: #f87171;
+  --accent: #fafafa;
+  --accent-text: #0a0a0b;
+  --code-bg: rgba(0, 0, 0, 0.25);
+  --glow: rgba(255, 255, 255, 0.06);
+  --glow-2: rgba(255, 255, 255, 0.045);
   --radius: 18px;
   color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #f4f4f5;
+  --bg-2: #ffffff;
+  --panel: rgba(0, 0, 0, 0.035);
+  --panel-strong: rgba(0, 0, 0, 0.06);
+  --border: rgba(0, 0, 0, 0.1);
+  --border-strong: rgba(0, 0, 0, 0.18);
+  --text: #18181b;
+  --text-dim: #52525b;
+  --text-faint: #71717a;
+  --danger: #dc2626;
+  --accent: #18181b;
+  --accent-text: #fafafa;
+  --code-bg: rgba(0, 0, 0, 0.04);
+  --glow: rgba(0, 0, 0, 0.05);
+  --glow-2: rgba(0, 0, 0, 0.035);
+  color-scheme: light;
 }
 
 * {
@@ -27,14 +52,15 @@ body {
 
 body {
   background:
-    radial-gradient(1200px 600px at 12% -10%, rgba(255, 255, 255, 0.06), transparent 60%),
-    radial-gradient(900px 520px at 100% 0%, rgba(255, 255, 255, 0.045), transparent 55%),
+    radial-gradient(1200px 600px at 12% -10%, var(--glow), transparent 60%),
+    radial-gradient(900px 520px at 100% 0%, var(--glow-2), transparent 55%),
     linear-gradient(180deg, var(--bg-2), var(--bg));
   color: var(--text);
   font-family: var(--font-geist-sans, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100%;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 button {
