@@ -178,7 +178,7 @@
 /* Voice controls */
 .controls {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
