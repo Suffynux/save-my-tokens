@@ -1,8 +1,11 @@
 # Module Documentation
 
 This document describes every module in the project, what it does, and how the
-pieces fit together. The application converts a document such as a PDF into clean
-Markdown so it can be pasted into an AI tool using far fewer tokens.
+pieces fit together. The application is a small toolbox of token-saving helpers
+for AI work. The first tool converts a document such as a PDF into clean Markdown
+so it can be pasted into an AI tool using far fewer tokens. The second tool turns
+a short voice note into plain text. The two tools share one theme and a top nav
+that switches between them.
 
 ## Overview
 
@@ -43,12 +46,39 @@ responsibilities are:
 5. Offer Copy to clipboard and Download as a .md file.
 6. Toggle between light and dark themes and remember the choice in local storage.
 
+### app/voice/page.tsx
+
+The voice-note-to-text screen, served at `/voice`. It is a client component that
+reuses the same styles, theme toggle, and layout as the home page. Its job is to
+turn a short voice note into the exact words as plain text. It can take audio two
+ways: a live recording from the microphone using the browser MediaRecorder, or an
+uploaded audio file by drag and drop or the file picker. The user first chooses
+the spoken language from a dropdown, which defaults to English (US).
+
+Whichever way the audio arrives, the page prepares it entirely in the browser
+before sending. It decodes the audio with the Web Audio API, downmixes it to a
+single channel, resamples it to 16 kHz using an OfflineAudioContext, and encodes
+the result as a 16-bit PCM WAV. Sending audio in exactly that shape means the
+Python backend needs no ffmpeg. The WAV bytes are posted to POST /api/transcribe
+with the chosen language in the X-Lang header. The returned text is shown with a
+word and character count, a Copy button, and a Download as .txt button. Anything
+longer than the 4.5 megabyte serverless limit (about two and a half minutes) is
+rejected with a clear message before upload.
+
+### app/voice/layout.tsx
+
+A tiny server component that wraps the voice page. Because the voice page is a
+client component it cannot export route metadata itself, so this layout exports
+the page title and description used for the browser tab and search results, then
+renders its children unchanged.
+
 ### app/page.module.css
 
-The scoped styles for the page. It contains the layout, the card, the drop zone,
-the result area, the footer, the theme toggle button, and the signature. The
-signature uses a left to right gradient that runs from purple through pink to
-orange. The favicon reuses these same three colours.
+The scoped styles shared by both screens. It contains the layout, the card, the
+drop zone, the result area, the footer, the theme toggle button, and the
+signature, plus the tool-switcher nav and the voice controls (language dropdown
+and record button). The signature uses a left to right gradient that runs from
+purple through pink to orange. The favicon reuses these same three colours.
 
 ### app/globals.css
 
@@ -85,10 +115,30 @@ standard handler class with a do_POST method. The steps are:
 A single MarkItDown converter instance is created once at module load and reused
 across warm invocations to avoid repeated setup cost.
 
+### api/transcribe.py
+
+The Vercel Python serverless function that performs voice transcription. It
+exposes a handler class with a do_POST method. The steps are:
+
+1. Read the Content-Length header and reject an empty body or a body larger than
+   the 4.5 megabyte limit.
+2. Read the raw bytes, which are a 16 kHz, 16-bit, mono WAV already prepared by
+   the browser, and read the requested language from the X-Lang header.
+3. Hand the WAV to the SpeechRecognition library and call the free, keyless Google
+   Web Speech endpoint with that language.
+4. Return the recognised words as JSON. If no speech is made out it returns a
+   clear error, and if the speech service is unreachable it says so.
+
+Because the audio arrives already at 16 kHz and 16 bit, SpeechRecognition does no
+sample-rate or width conversion: it only runs the flac binary it ships with and
+posts the result. That is why this function needs no ffmpeg. A single Recognizer
+instance is created once at module load and reused across warm invocations.
+
 ### api/requirements.txt
 
-Lists the Python dependency, which is markitdown. Vercel installs this when it
-builds the Python function. The file must live beside the function it serves.
+Lists the Python dependencies: markitdown for the document converter and
+SpeechRecognition for the voice transcriber. Vercel installs these when it builds
+the Python functions. The file must live beside the functions it serves.
 
 ## Configuration
 
@@ -100,9 +150,9 @@ during local development that reports the framework version.
 
 ### vercel.json
 
-Sets the memory and the maximum duration for the Python function. It grants 1024
-megabytes of memory and a 60 second timeout so larger documents have room to
-convert.
+Sets the memory and the maximum duration for the two Python functions. It grants
+each of them 1024 megabytes of memory and a 60 second timeout so larger documents
+have room to convert and transcription has room to finish.
 
 ### package.json
 

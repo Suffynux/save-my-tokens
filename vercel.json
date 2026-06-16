@@ -4,6 +4,10 @@
     "api/markitdown.py": {
       "memory": 1024,
       "maxDuration": 60
+    },
+    "api/transcribe.py": {
+      "memory": 1024,
+      "maxDuration": 60
     }
   }
 }

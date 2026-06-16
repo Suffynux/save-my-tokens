@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
 
@@ -147,6 +148,14 @@ export default function Home() {
       </button>
 
       <header className={styles.header}>
+        <nav className={styles.nav}>
+          <Link className={`${styles.navLink} ${styles.navLinkActive}`} href="/">
+            Documents → Markdown
+          </Link>
+          <Link className={styles.navLink} href="/voice">
+            Voice → Text
+          </Link>
+        </nav>
         <span className={styles.badge}>Save your token</span>
         <h1 className={styles.title}>Save your tokens</h1>
         <p className={styles.subtitle}>

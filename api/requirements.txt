@@ -1,1 +1,2 @@
 markitdown[pdf,docx,pptx,xlsx]==0.1.6
+SpeechRecognition==3.16.1
