@@ -284,9 +284,8 @@ export default function Voice() {
         <span className={styles.badge}>Voice to text</span>
         <h1 className={styles.title}>Voice notes to text</h1>
         <p className={styles.subtitle}>
-          Record a quick voice note or drop an audio file and get the exact words
-          back as plain text. Paste the transcript into Claude, ChatGPT, Gemini, or
-          any AI tool — or just keep it. Pick the language you spoke in below.
+          Record a voice note or upload an audio file. Get the words back as text
+          you can copy or download. Pick your language first.
         </p>
       </header>
 
@@ -427,46 +426,41 @@ export default function Voice() {
         <div className={styles.infoBlock}>
           <h2 className={styles.infoTitle}>What it does</h2>
           <p className={styles.infoText}>
-            It listens to your voice note and writes down the exact words. Record
-            straight from your microphone or upload an audio file you already have.
-            The audio is prepared in your browser and sent for transcription on
-            demand — nothing is stored.
+            Turns a voice note into text. Record from your mic or upload a file
+            you already have. Your audio is never stored.
           </p>
         </div>
 
         <div className={styles.infoBlock}>
           <h2 className={styles.infoTitle}>Languages</h2>
           <p className={styles.infoText}>
-            Start with English, or pick another language from the list before you
-            record or upload. Choosing the right language helps the transcription
-            get the words and spelling right. More languages can be added easily.
+            English works out of the box. Spoke another language? Pick it from the
+            list first so the words and spelling come out right.
           </p>
         </div>
 
         <div className={styles.infoBlock}>
           <h2 className={styles.infoTitle}>How to use it</h2>
           <ol className={styles.infoList}>
-            <li>Pick the language you are speaking.</li>
-            <li>Press record and talk, then stop — or upload an audio file.</li>
-            <li>Wait a moment while it transcribes.</li>
-            <li>Copy the text or download it as a .txt file.</li>
+            <li>Pick your language.</li>
+            <li>Record and talk, then stop. Or upload a file.</li>
+            <li>Wait a moment for the text.</li>
+            <li>Copy it or download a .txt.</li>
           </ol>
         </div>
 
         <div className={styles.infoBlock}>
-          <h2 className={styles.infoTitle}>Tips for accuracy</h2>
+          <h2 className={styles.infoTitle}>Tips</h2>
           <p className={styles.infoText}>
-            Speak clearly and keep background noise low. Short, single-speaker notes
-            work best. Very long recordings hit the free serverless size limit, so
-            split a long note into a few shorter clips.
+            Speak clearly and keep it quiet around you. One voice at a time works
+            best. Long notes hit the size cap, so split them up.
           </p>
         </div>
       </section>
 
       <footer className={styles.footer}>
         <div>
-          Transcribed on-demand with the free Google Web Speech service. Your audio
-          is processed live and never stored.
+          Runs on the free Google Web Speech service. Your audio is never stored.
         </div>
         <div className={styles.credit}>
           Developed by{" "}

@@ -57,7 +57,7 @@ export default function Home() {
     if (file.size > MAX_BYTES) {
       setStatus("error");
       setError(
-        `That file is ${formatSize(file.size)}. The free serverless limit is 4.5 MB — try a smaller PDF.`,
+        `That file is ${formatSize(file.size)}. The free serverless limit is 4.5 MB. Try a smaller PDF.`,
       );
       return;
     }
